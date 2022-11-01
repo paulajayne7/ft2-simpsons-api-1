@@ -1,0 +1,22 @@
+.characterContainer {
+  display: flex;
+  background-color: rgb(135, 178, 135);
+  margin: 10px;
+}
+
+img {
+  width: 100px;
+}
+
+.item {
+  margin: 10px;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.Left {
+  display: flex;
+  order: 5;
+}
