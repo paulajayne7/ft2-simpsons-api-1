@@ -11,7 +11,6 @@ class Character extends Component {
       quote,
       characterDirection,
     } = this.props.character;
-    console.log(this.props);
 
     if (characterDirection === "Left") {
       return (
@@ -24,6 +23,9 @@ class Character extends Component {
           </div>
           <div class="item">
             <Quote quote={quote} />
+          </div>
+          <div>
+            <button onClick={() => this.props.onDelete(quote)}>Delete</button>
           </div>
         </div>
       );
@@ -39,6 +41,9 @@ class Character extends Component {
         </div>
         <div class="item">
           <Image image={image} name={name} />
+        </div>
+        <div>
+          <button onClick={() => this.props.onDelete(quote)}>Delete</button>
         </div>
       </div>
     );

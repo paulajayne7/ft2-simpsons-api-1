@@ -14,12 +14,67 @@ class App extends Component {
     this.setState({ characters });
   }
 
+  onDelete = (quote) => {
+    const indexOf = this.state.characters.findIndex((item) => {
+      return item.quote === quote;
+    });
+
+    const copy = { ...this.state };
+    copy.characters.splice(indexOf, 1);
+    this.setState({ ...copy });
+  };
+
+  onAdd = () => {
+    const indexOf = this.state.characters.findIndex(
+      (item) => item.quote === this.state.quote
+    );
+
+    if (indexOf > -1) {
+      return;
+    }
+
+    const copy = { ...this.state };
+    copy.characters.unshift({
+      character: this.state.character,
+      quote: this.state.quote,
+      image: "",
+      characterDirection: "Right",
+    });
+    this.setState({ ...copy });
+  };
+
+  onInput = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
-    const { characters } = this.state;
+    let { characters } = this.state;
 
     if (!this.state.characters) return <p>Loading...</p>;
 
-    return <Characters characters={characters} />;
+    if (this.state.search) {
+      characters = characters.filter((item) => {
+        return item.character
+          .toLowerCase()
+          .includes(this.state.search.toLowerCase().trim());
+      });
+    }
+
+    return (
+      <>
+        <div onInput={this.onInput}>
+          <input type="text" name="character" />
+          <input type="text" name="quote" />
+          <button onClick={this.onAdd}>Add</button>
+        </div>
+        <div onInput={this.onInput}>
+          <h1>Search</h1>
+          <input type="text" name="search" />
+        </div>
+
+        <Characters onDelete={this.onDelete} characters={characters} />
+      </>
+    );
   }
 }
 

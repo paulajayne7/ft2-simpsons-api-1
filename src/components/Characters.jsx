@@ -3,9 +3,11 @@ import Character from "./Character";
 
 class Characters extends Component {
   render() {
-    const { characters } = this.props;
+    const { characters, onDelete } = this.props;
 
-    return characters.map((character) => <Character character={character} />);
+    return characters.map((character) => (
+      <Character character={character} onDelete={onDelete} />
+    ));
   }
 }
 
