@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Characters from "./components/Characters.jsx";
+import Splash from "./components/Splash";
+import Interface from "./components/Interface";
 import "./App.css";
 
 class App extends Component {
-  state = {};
+  state = { screenMode: 0 };
 
   async componentDidMount() {
     const { data: characters } = await axios.get(
@@ -12,6 +13,10 @@ class App extends Component {
     );
 
     this.setState({ characters });
+
+    setTimeout(() => {
+      this.setState({ screenMode: 1 });
+    }, 500);
   }
 
   onDelete = (quote) => {
@@ -48,6 +53,10 @@ class App extends Component {
   };
 
   render() {
+    if (this.state.screenMode === 0) {
+      return <Splash />;
+    }
+
     let { characters } = this.state;
 
     if (!this.state.characters) return <p>Loading...</p>;
@@ -62,17 +71,12 @@ class App extends Component {
 
     return (
       <>
-        <div onInput={this.onInput}>
-          <input type="text" name="character" />
-          <input type="text" name="quote" />
-          <button onClick={this.onAdd}>Add</button>
-        </div>
-        <div onInput={this.onInput}>
-          <h1>Search</h1>
-          <input type="text" name="search" />
-        </div>
-
-        <Characters onDelete={this.onDelete} characters={characters} />
+        <Interface
+          onInput={this.onInput}
+          onDelete={this.onDelete}
+          characters={characters}
+          onAdd={this.onAdd}
+        />
       </>
     );
   }
