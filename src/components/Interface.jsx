@@ -15,9 +15,12 @@ class Interface extends Component {
           <input type="text" name="search" />
         </div>
 
+        <h1>Total no of chars liked: {this.props.count}</h1>
+
         <Characters
           onDelete={this.props.onDelete}
           characters={this.props.characters}
+          onLike={this.props.onLike}
         />
       </>
     );

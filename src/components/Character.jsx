@@ -4,12 +4,15 @@ import Quote from "./Quote";
 import Image from "./Image";
 
 class Character extends Component {
+  state = { liked: false };
+
   render() {
     const {
       image,
       character: name,
       quote,
       characterDirection,
+      liked,
     } = this.props.character;
 
     if (characterDirection === "Left") {
@@ -26,6 +29,16 @@ class Character extends Component {
           </div>
           <div>
             <button onClick={() => this.props.onDelete(quote)}>Delete</button>
+          </div>
+          <div>
+            <button
+              className={liked ? "liked" : "notLiked"}
+              onClick={() => {
+                this.props.onLike(quote);
+              }}
+            >
+              Like
+            </button>
           </div>
         </div>
       );
@@ -44,6 +57,16 @@ class Character extends Component {
         </div>
         <div>
           <button onClick={() => this.props.onDelete(quote)}>Delete</button>
+        </div>
+        <div>
+          <button
+            className={liked ? "liked" : "notLiked"}
+            onClick={() => {
+              this.props.onLike(quote);
+            }}
+          >
+            Like
+          </button>
         </div>
       </div>
     );

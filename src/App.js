@@ -19,6 +19,18 @@ class App extends Component {
     }, 500);
   }
 
+  onLike = (quote) => {
+    const characters = [...this.state.characters];
+
+    //find the index at the current moment
+    const indexOf = characters.findIndex((item) => item.quote === quote);
+    console.log(indexOf);
+
+    characters[indexOf].liked = !characters[indexOf].liked;
+
+    this.setState({ characters });
+  };
+
   onDelete = (quote) => {
     const indexOf = this.state.characters.findIndex((item) => {
       return item.quote === quote;
@@ -61,6 +73,14 @@ class App extends Component {
 
     if (!this.state.characters) return <p>Loading...</p>;
 
+    //work out how many are liked
+    let count = 0;
+    this.state.characters.forEach((item) => {
+      if (item.liked) {
+        count++;
+      }
+    });
+
     if (this.state.search) {
       characters = characters.filter((item) => {
         return item.character
@@ -76,6 +96,8 @@ class App extends Component {
           onDelete={this.onDelete}
           characters={characters}
           onAdd={this.onAdd}
+          onLike={this.onLike}
+          count={count}
         />
       </>
     );

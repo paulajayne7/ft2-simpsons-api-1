@@ -3,10 +3,18 @@ import Character from "./Character";
 
 class Characters extends Component {
   render() {
-    const { characters, onDelete } = this.props;
+    const { characters, onDelete, onLike } = this.props;
 
-    return characters.map((character) => (
-      <Character character={character} onDelete={onDelete} />
+    const copy = [...characters];
+    copy.reverse();
+
+    return copy.map((character, index) => (
+      <Character
+        character={character}
+        onDelete={onDelete}
+        onLike={onLike}
+        index={index}
+      />
     ));
   }
 }

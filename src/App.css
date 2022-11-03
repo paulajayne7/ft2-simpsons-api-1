@@ -20,3 +20,10 @@ img {
   display: flex;
   order: 5;
 }
+
+.liked {
+  background-color: green;
+}
+.notLiked {
+  background-color: blue;
+}
