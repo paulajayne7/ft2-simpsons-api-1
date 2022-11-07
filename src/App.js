@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Splash from "./components/Splash";
 import Interface from "./components/Interface";
-
+import { connect } from "react-redux";
 import "./App.css";
 
 class App extends Component {
@@ -58,7 +58,8 @@ class App extends Component {
       image: "",
       characterDirection: "Right",
     });
-    this.setState({ ...copy });
+
+    this.setState({ ...copy, character: "", quote: "" });
   };
 
   onInput = (e) => {
@@ -82,11 +83,11 @@ class App extends Component {
       }
     });
 
-    if (this.state.search) {
+    if (this.props.searchInput) {
       characters = characters.filter((item) => {
         return item.character
           .toLowerCase()
-          .includes(this.state.search.toLowerCase().trim());
+          .includes(this.props.searchInput.toLowerCase().trim());
       });
     }
 
@@ -99,10 +100,16 @@ class App extends Component {
           onAdd={this.onAdd}
           onLike={this.onLike}
           count={count}
+          quote={this.state.quote}
+          character={this.state.character}
         />
       </>
     );
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return { searchInput: state.searchInput };
+}
+
+export default connect(mapStateToProps)(App);
