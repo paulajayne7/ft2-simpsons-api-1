@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Character from "./Character";
 import SortSelection from "./SortSelection";
+import { connect } from "react-redux";
 
 class Characters extends Component {
   state = {};
@@ -49,26 +50,41 @@ class Characters extends Component {
   };
 
   render() {
-    const { characters, onDelete, onLike } = this.props;
+    const { characters } = this.props; //never change props
 
     //make a copy of the original state
-    const copy = [...characters];
+    let copy = [...characters];
     this.sort(copy);
+
+    let count = 0;
+    this.props.characters.forEach((item) => {
+      if (item.liked) {
+        count++;
+      }
+    });
+
+    if (this.props.searchInput) {
+      copy = copy.filter((item) => {
+        return item.character
+          .toLowerCase()
+          .includes(this.props.searchInput.toLowerCase().trim());
+      });
+    }
 
     return (
       <>
+        <h1>Total no of chars liked: {count}</h1>
         <SortSelection onInput={this.onInput} />
         {copy.map((character, index) => (
-          <Character
-            character={character}
-            onDelete={onDelete}
-            onLike={onLike}
-            index={index}
-          />
+          <Character key={index} character={character} index={index} />
         ))}
       </>
     );
   }
 }
 
-export default Characters;
+function mapStateToProps(state) {
+  return { characters: state.characters, searchInput: state.searchInput };
+}
+
+export default connect(mapStateToProps)(Characters);

@@ -15,7 +15,9 @@ class SortSelection extends Component {
     return (
       <select onInput={this.props.onInput}>
         {this.state.options.map((option) => (
-          <option value={option.id}>{option.name}</option>
+          <option key={option.id} value={option.id}>
+            {option.name}
+          </option>
         ))}
       </select>
     );

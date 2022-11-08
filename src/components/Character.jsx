@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import Name from "./Name";
 import Quote from "./Quote";
 import Image from "./Image";
+import { DELETE_CHARACTER, LIKE_CHARACTER } from "../redux/types";
+import { connect } from "react-redux";
 
 class Character extends Component {
-  state = { liked: false };
-
   render() {
+    console.log("Comp re-ran");
     const {
       image,
       character: name,
@@ -17,24 +18,30 @@ class Character extends Component {
 
     if (characterDirection === "Left") {
       return (
-        <div class="characterContainer">
-          <div class="item">
+        <div className="characterContainer">
+          <div className="item">
             <Name name={name} />
           </div>
-          <div class="item">
+          <div className="item">
             <Image image={image} name={name} />
           </div>
-          <div class="item">
+          <div className="item">
             <Quote quote={quote} />
           </div>
           <div>
-            <button onClick={() => this.props.onDelete(quote)}>Delete</button>
+            <button
+              onClick={() =>
+                this.props.dispatch({ type: DELETE_CHARACTER, payload: quote })
+              }
+            >
+              Delete
+            </button>
           </div>
           <div>
             <button
               className={liked ? "liked" : "notLiked"}
               onClick={() => {
-                this.props.onLike(quote);
+                this.props.dispatch({ type: LIKE_CHARACTER, payload: quote });
               }}
             >
               Like
@@ -45,24 +52,30 @@ class Character extends Component {
     }
 
     return (
-      <div class="characterContainer">
-        <div class="item">
+      <div className="characterContainer">
+        <div className="item">
           <Name name={name} />
         </div>
-        <div class="item">
+        <div className="item">
           <Quote quote={quote} />
         </div>
-        <div class="item">
+        <div className="item">
           <Image image={image} name={name} />
         </div>
         <div>
-          <button onClick={() => this.props.onDelete(quote)}>Delete</button>
+          <button
+            onClick={() =>
+              this.props.dispatch({ type: DELETE_CHARACTER, payload: quote })
+            }
+          >
+            Delete
+          </button>
         </div>
         <div>
           <button
             className={liked ? "liked" : "notLiked"}
             onClick={() => {
-              this.props.onLike(quote);
+              this.props.dispatch({ type: LIKE_CHARACTER, payload: quote });
             }}
           >
             Like
@@ -73,4 +86,8 @@ class Character extends Component {
   }
 }
 
-export default Character;
+function mapStateToProps(state) {
+  return { characters: state.characters };
+}
+
+export default connect(mapStateToProps)(Character);
