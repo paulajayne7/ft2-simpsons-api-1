@@ -1,17 +1,18 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Character from "./Character";
 import SortSelection from "./SortSelection";
-import { connect } from "react-redux";
 
-class Characters extends Component {
-  state = {};
+const Characters = () => {
+  const characters = useSelector((state) => state.characters);
+  const searchInput = useSelector((state) => state.searchInput);
+  const [sortSelection, setsortSelection] = useState("");
 
-  onInput = (e) => {
-    this.setState({ sortSelection: Number(e.target.value) });
+  const onInput = (e) => {
+    setsortSelection(Number(e.target.value));
   };
-
-  sort = (copy) => {
-    switch (this.state.sortSelection) {
+  const sort = (copy) => {
+    switch (sortSelection) {
       case 1:
         copy.sort((firstItem, secondItem) => {
           if (firstItem.character > secondItem.character) return 1;
@@ -49,42 +50,36 @@ class Characters extends Component {
     }
   };
 
-  render() {
-    const { characters } = this.props; //never change props
+  //make a copy of the original state
+  let copy = [...characters];
+  sort(copy);
 
-    //make a copy of the original state
-    let copy = [...characters];
-    this.sort(copy);
+  console.log(sortSelection, copy);
 
-    let count = 0;
-    this.props.characters.forEach((item) => {
-      if (item.liked) {
-        count++;
-      }
-    });
-
-    if (this.props.searchInput) {
-      copy = copy.filter((item) => {
-        return item.character
-          .toLowerCase()
-          .includes(this.props.searchInput.toLowerCase().trim());
-      });
+  let count = 0;
+  characters.forEach((item) => {
+    if (item.liked) {
+      count++;
     }
+  });
 
-    return (
-      <>
-        <h1>Total no of chars liked: {count}</h1>
-        <SortSelection onInput={this.onInput} />
-        {copy.map((character, index) => (
-          <Character key={index} character={character} index={index} />
-        ))}
-      </>
-    );
+  if (searchInput) {
+    copy = copy.filter((item) => {
+      return item.character
+        .toLowerCase()
+        .includes(searchInput.toLowerCase().trim());
+    });
   }
-}
 
-function mapStateToProps(state) {
-  return { characters: state.characters, searchInput: state.searchInput };
-}
+  return (
+    <>
+      <h1>Total no of chars liked: {count}</h1>
+      <SortSelection onInput={onInput} />
+      {copy.map((character, index) => (
+        <Character key={index} character={character} index={index} />
+      ))}
+    </>
+  );
+};
 
-export default connect(mapStateToProps)(Characters);
+export default Characters;
